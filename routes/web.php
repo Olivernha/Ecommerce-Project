@@ -16,9 +16,22 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/','ClientController@home');
-Route::get('/cart','ClientController@cart');
-Route::get('/shop','ClientController@shop');
-Route::get('/checkout','ClientController@checkout');
-Route::get('/login','ClientController@login');
-Route::get('/signup','ClientController@signup');
+Route::get('/', 'ClientController@home');
+Route::get('/cart', 'ClientController@cart');
+Route::get('/shop', 'ClientController@shop');
+Route::get('/checkout', 'ClientController@checkout');
+Route::get('/login', 'ClientController@login');
+Route::get('/signup', 'ClientController@signup');
+Route::get('/admin', 'AdminController@dashboard');
+
+Route::get('/orders', 'AdminController@orders');
+
+Route::get('/products', 'ProductController@products');
+Route::get('/addproduct', 'ProductController@addproduct');
+
+Route::get('/categories', 'AdminController@categories');
+Route::get('/addcategory', 'AdminController@addcategory');
+
+
+Route::get('/sliders', 'SliderController@sliders');
+Route::get('/addslider', 'SliderController@addslider');

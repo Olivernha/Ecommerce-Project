@@ -8,11 +8,13 @@
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('frontend/login/images/bg-01.jpg');">
 			<div class="wrap-login100">
+
 				<form class="login100-form validate-form">
+                    <a href="{{URL::to('/')}}">
 					<span class="login100-form-logo">
 						<i class="zmdi zmdi-landscape"></i>
 					</span>
-
+                </a>
 					<span class="login100-form-title p-b-34 p-t-27">
 						Log in
 					</span>
