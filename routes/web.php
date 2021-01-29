@@ -28,10 +28,14 @@ Route::get('/orders', 'AdminController@orders');
 
 Route::get('/products', 'ProductController@products');
 Route::get('/addproduct', 'ProductController@addproduct');
+Route::post('/saveproduct', 'ProductController@saveproduct');
 
 Route::get('/categories', 'CategoryController@categories');
 Route::get('/addcategory', 'CategoryController@addcategory');
-Route::post('/savecategory','CategoryController@savecategory');
+Route::post('/savecategory', 'CategoryController@savecategory');
+Route::get('/edit/{id}', 'CategoryController@edit');
+Route::post('/updatecategory', 'CategoryController@updatecategory');
+Route::get('/delete/{id}', 'CategoryController@delete');
 
 
 Route::get('/sliders', 'SliderController@sliders');

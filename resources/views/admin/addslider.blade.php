@@ -36,7 +36,7 @@
 @endsection
 @section('scripts')
 
-    <script src="backend/js/bt-maxLength.js"></script>
+<script src="{{asset('js/bt-maxLength.js')}}"></script>
 @endsection
 
 

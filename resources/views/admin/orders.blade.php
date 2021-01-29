@@ -1,6 +1,6 @@
 @extends('layouts.appadmin')
 @section('title')
-   Orders
+    Orders
 @endsection
 @section('content')
     <div class="card">
@@ -173,5 +173,5 @@
 
 @endsection
 @section('scripts')
-    <script src="backend/js/data-table.js"></script>
+    <script src="{{ asset('backend/js/data-table.js') }}"></script>
 @endsection
