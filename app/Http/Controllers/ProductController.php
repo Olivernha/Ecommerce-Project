@@ -9,10 +9,6 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     //
-    public function products()
-    {
-        return view('admin.products');
-    }
     public function addproduct()
     {
         $categories = Category::all()->pluck('category_name', 'category_name');
@@ -59,5 +55,10 @@ class ProductController extends Controller
 
         $product->save();
         return redirect('/addproduct')->with('status', 'The ' . $product->product_name . ' has been updated successfully');
+    }
+    public function products()
+    {
+        $products = Product::get();
+        return view('admin.products')->with('products', $products);
     }
 }
