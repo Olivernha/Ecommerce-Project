@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Create Slider</h4>
-                    {!! Form::open(['action' => 'SliderController@addslider', 'class' => 'cmxform', 'method' => 'POST', 'id'
+                    {!! Form::open(['action' => 'SliderController@saveslider', 'class' => 'cmxform', 'method' => 'POST', 'id'
                     => 'commentForm']) !!}
                     {{ csrf_field() }}
                     <div class="form-group">
