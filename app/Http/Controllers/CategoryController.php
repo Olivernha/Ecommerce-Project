@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -41,7 +43,13 @@ class CategoryController extends Controller
     public function updatecategory(Request $request)
     {
         $category = Category::find($request->input('id'));
+        $oldcat = $category->category_name;
         $category->category_name = $request->input('category_name');
+        $data = array();
+        $data['product_category'] = $request->input('category_name');
+        DB::table('products')
+            ->where('product_category', $oldcat)
+            ->where($data);
         $category->update();
 
         return redirect('/categories')->with('status', 'The ' . $category->category_name . 'Category has been updated successfully');
@@ -51,5 +59,11 @@ class CategoryController extends Controller
         $category = Category::find($id);
         $category->delete();
         return redirect('/categories')->with('status', 'The ' . $category->category_name . 'Category has been deleted successfully');
+    }
+    public function view_by_cat($name)
+    {
+        $categories = Category::get();
+        $products = Product::where('product_category', $name)->get();
+        return view('client.shop', compact('categories', 'products'));
     }
 }

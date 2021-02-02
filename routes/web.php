@@ -41,8 +41,14 @@ Route::post('/savecategory', 'CategoryController@savecategory');
 Route::get('/edit_category/{id}', 'CategoryController@edit');
 Route::post('/updatecategory', 'CategoryController@updatecategory');
 Route::get('/delete/{id}', 'CategoryController@delete');
+Route::get('/view_by_cat/{name}', 'CategoryController@view_by_cat');
 
 
 Route::get('/sliders', 'SliderController@sliders');
 Route::get('/addslider', 'SliderController@addslider');
 Route::post('/saveslider', 'SliderController@saveslider');
+Route::get('/edit_slider/{id}', 'SliderController@edit_slider');
+Route::post('/update_slider', 'SliderController@updateslider');
+Route::get('/delete_slider/{id}', 'SliderController@deleteslider');
+Route::get('/activate_slider/{id}', 'SliderController@activate_slider');
+Route::get('/unactivate_slider/{id}', 'SliderController@unactivate_slider');
