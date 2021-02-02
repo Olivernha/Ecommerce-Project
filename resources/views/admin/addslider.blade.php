@@ -8,8 +8,13 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Create Slider</h4>
-                    {!! Form::open(['action' => 'SliderController@saveslider', 'class' => 'cmxform', 'method' => 'POST', 'id'
-                    => 'commentForm']) !!}
+                    @if (Session::has('status'))
+                        <div class="alert alert-success">
+                            {{ Session::get('status') }}
+                        </div>
+                    @endif
+                    {!! Form::open(['action' => 'SliderController@saveslider', 'class' => 'cmxform', 'method' => 'POST',
+                    'id' => 'commentForm', 'enctype' => 'multipart/form-data']) !!}
                     {{ csrf_field() }}
                     <div class="form-group">
                         {!! Form::label('', 'Description One', ['for' => 'cname']) !!}
@@ -36,7 +41,5 @@
 @endsection
 @section('scripts')
 
-<script src="{{asset('js/bt-maxLength.js')}}"></script>
+    <script src="{{ asset('js/bt-maxLength.js') }}"></script>
 @endsection
-
-
