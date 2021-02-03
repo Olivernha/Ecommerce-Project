@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Cart;
 use App\Category;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -129,5 +131,13 @@ class ProductController extends Controller
         $product->status = 0;
         $product->update();
         return redirect('/products')->with('status', 'The ' . $product->product_name . ' status  has been updated successfully');
+    }
+    public function addToCart($id){
+        $product=Product::find($id);
+        $oldCart=Session::has('cart') ? Session::get('cart') : null ;
+        $cart=new Cart($oldCart);
+        $cart->add($product,$id);
+        Session::put('cart',$cart);
+        return redirect('/shop');
     }
 }

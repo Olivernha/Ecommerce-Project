@@ -7,7 +7,8 @@
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center">
                 <div class="col-md-9 ftco-animate text-center">
-                    <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Products</span></p>
+                    <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Products</span>
+                    </p>
                     <h1 class="mb-0 bread">Products</h1>
                 </div>
             </div>
@@ -23,7 +24,7 @@
                         </li>
                         @foreach ($categories as $category)
                             <li><a href="/view_by_cat/{{ $category->category_name }}"
-                                    class="{{ request()->is('view_by_cat/' . $category->category_name) ? 'active' : '' }}">
+                                   class="{{ request()->is('view_by_cat/' . $category->category_name) ? 'active' : '' }}">
                                     {{ $category->category_name }}
                                 </a>
                             </li>
@@ -38,7 +39,8 @@
                     <div class="col-md-6 col-lg-3 ftco-animate">
                         <div class="product">
                             <a href="#" class="img-prod"><img class="img-fluid"
-                                    src="/storage/product_images/{{ $product->product_image }}" alt="Colorlib Template">
+                                                              src="/storage/product_images/{{ $product->product_image }}"
+                                                              alt="Colorlib Template">
                                 <div class="overlay"></div>
                             </a>
                             <div class="text py-3 pb-4 px-3 text-center">
@@ -51,10 +53,11 @@
                                 <div class="bottom-area d-flex px-3">
                                     <div class="m-auto d-flex">
                                         <a href="#"
-                                            class="add-to-cart d-flex justify-content-center align-items-center text-center">
+                                           class="add-to-cart d-flex justify-content-center align-items-center text-center">
                                             <span><i class="ion-ios-menu"></i></span>
                                         </a>
-                                        <a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                        <a href="/addToCart/{{$product->id}}"
+                                           class="buy-now d-flex justify-content-center align-items-center mx-1">
                                             <span><i class="ion-ios-cart"></i></span>
                                         </a>
                                         <a href="#" class="heart d-flex justify-content-center align-items-center ">
