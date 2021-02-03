@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -14,6 +15,11 @@ class AdminController extends Controller
 
     public function orders()
     {
-        return view('admin.orders');
+        $orders=Order::get();
+        $orders->transform(function ($order,$key){
+            $order->cart = unserialize($order->cart);
+            return $order;
+        });
+        return view('admin.orders',compact('orders'));
     }
 }
