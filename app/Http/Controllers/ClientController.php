@@ -6,20 +6,24 @@ use App\Slider;
 use App\Product;
 use App\Category;
 use App\Cart;
+use App\Client;
+use App\Mail\SendMail;
 use App\Order;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Stripe\Charge;
 use Stripe\Stripe;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class ClientController extends Controller
 {
     //
     public function home()
     {
-        $products = Product::get();
-        $sliders = Slider::get();
+        $products = Product::where('status', 1)->get();
+        $sliders = Slider::where('status', 1)->get();
         return view('client.home', compact('sliders', 'products'));
     }
     public function cart()
@@ -56,11 +60,14 @@ class ClientController extends Controller
     public function shop()
     {
         $categories = Category::get();
-        $products = Product::get();
+        $products = Product::where('status', 1)->get();
         return view('client.shop', compact('products', 'categories'));
     }
     public function checkout()
     {
+        if (!Session::has('client')) {
+            return redirect('/client_login');
+        }
         if (!Session::has('cart')) {
             return redirect('/cart');
         }
@@ -83,19 +90,27 @@ class ClientController extends Controller
         $cart = new Cart($oldCart);
         Stripe::setApiKey('sk_test_51IGhxCEpyNpaHrYFwiCuw7hsa3wMRDJLcutiFs99onniLhKL54RmkIyAeXNFvffju9fp1rrPmRU88MJgo7he6R4J00bd78NylE');
         try {
-            $charge=Charge::create(array(
+            $charge = Charge::create(array(
                 "amount" => Session::get('cart')->totalPrice * 100,
                 "currency" => "usd",
                 "source" => $request->input('stripeToken'), // obtainded with Stripe.js
                 "description" => "Test Charge"
             ));
-            $order=new Order();
-            $order->name=$request->input('name');
-            $order->address=$request->input('address');
-            $order->cart=serialize($cart);
-            $order->payment_id= $charge->id;
+            $order = new Order();
+            $order->name = $request->input('name');
+            $order->address = $request->input('address');
+            $order->cart = serialize($cart);
+            $order->payment_id = $charge->id;
             $order->save();
 
+            $orders = Order::where('payment_id', $charge->id)->get();
+            $orders->transform(function ($order, $key) {
+                $order->cart = unserialize($order->cart);
+                return $order;
+            });
+
+            $email = Session::get('client')->email;
+            Mail::to($email)->send(new SendMail($orders));
         } catch (\Exception $e) {
             Session::put('error', $e->getMessage());
             return redirect('/checkout');
@@ -103,5 +118,57 @@ class ClientController extends Controller
 
         Session::forget('cart');
         return redirect('/cart')->with('success', 'Purchase accomplished successfully !');
+    }
+    public function createaccount(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'email|required|unique:clients',
+            'password' => 'required|min:4'
+        ]);
+        $client = new Client();
+        $client->email = $request->input('email');
+        $client->password = bcrypt($request->input('password'));
+
+        $client->save();
+        return back()->with('status', 'Your account has been created successfully');
+    }
+    public function accessaccount(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'email|required',
+            'password' => 'required|min:4'
+        ]);
+        $client = Client::where('email', $request->input('email'))->first();
+        if ($client) {
+            if (Hash::check($request->input('password'), $client->password)) {
+                Session::put('client', $client);
+                // return back()->with('status', 'Your email is' . Session::get('client')->email);
+                return redirect('/shop');
+            } else {
+                return back()->with('error', 'Wrong password or email');
+            }
+        } else {
+            return back()->with('error', 'You do not have an account');
+        }
+    }
+    public function logout()
+    {
+        Session::forget('client');
+        return back();
+    }
+    public function addToCart($id)
+    {
+        $product = Product::find($id);
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        $cart->add($product, $id);
+        Session::put('cart', $cart);
+        return redirect('/shop');
+    }
+    public function view_by_cat($name)
+    {
+        $categories = Category::get();
+        $products = Product::where('product_category', $name)->get();
+        return view('client.shop', compact('categories', 'products'));
     }
 }

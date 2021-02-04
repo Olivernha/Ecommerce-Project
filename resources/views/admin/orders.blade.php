@@ -3,10 +3,15 @@
     Orders
 @endsection
 @section('content')
-    {{Form::hidden('',$increment=1)}}
+    {{ Form::hidden('', $increment = 1) }}
     <div class="card">
         <div class="card-body">
             <h4 class="card-title"> Orders</h4>
+            @if (Session::has('error'))
+                <div class="alert alert-danger">
+                    {{ Session::get('error') }}
+                </div>
+            @endif
             <div class="row">
                 <div class="col-12">
                     <div class="table-responsive">
@@ -22,30 +27,31 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($orders as $order)
-                                <tr>
-                                    <td>{{$increment}}</td>
-                                    <td>{{$order->name}}</td>
-                                    <td>{{$order->address}}</td>
+                                @foreach ($orders as $order)
+                                    <tr>
+                                        <td>{{ $increment }}</td>
+                                        <td>{{ $order->name }}</td>
+                                        <td>{{ $order->address }}</td>
 
-                                    <td>
-                                        @foreach($order->cart->items as $item)
-                                            @if(end($order->cart->items) === $item )
-                                                {{  $item['product_name'] }}
-                                            @else
-                                                {{  $item['product_name'].' ,' }}
+                                        <td>
+                                            @foreach ($order->cart->items as $item)
+                                                @if (end($order->cart->items) === $item)
+                                                    {{ $item['product_name'] }}
+                                                @else
+                                                    {{ $item['product_name'] . ' ,' }}
 
-                                            @endif
-                                        @endforeach
+                                                @endif
+                                            @endforeach
 
 
-                                    </td>
-                                    <td>{{$order->payment_id}}</td>
-                                    <td>
-                                        <button class="btn btn-outline-primary">View</button>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                        </td>
+                                        <td>{{ $order->payment_id }}</td>
+                                        <td>
+                                            <button onclick="window.location = '{{ url('/view_pdf/' . $order->id) }}'"
+                                                class="btn btn-outline-primary">View</button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,11 +20,16 @@ Route::get('/', 'ClientController@home');
 Route::get('/cart', 'ClientController@cart');
 Route::get('/shop', 'ClientController@shop');
 Route::get('/checkout', 'ClientController@checkout');
-Route::get('/login', 'ClientController@login');
+Route::get('/client_login', 'ClientController@login');
 Route::get('/signup', 'ClientController@signup');
+Route::get('/addToCart/{id}', 'ClientController@addToCart');
 Route::post('/updateqty', 'ClientController@updateqty');
 Route::get('/removeitem/{id}', 'ClientController@removeitem');
 Route::post('postcheckout', 'ClientController@postcheckout');
+Route::post('/createaccount', 'ClientController@createaccount');
+Route::post('/accessaccount', 'ClientController@accessaccount');
+Route::get('/client_logout', 'ClientController@logout');
+Route::get('/view_by_cat/{name}', 'ClientController@view_by_cat');
 
 Route::get('/admin', 'AdminController@dashboard');
 Route::get('/orders', 'AdminController@orders');
@@ -37,7 +42,7 @@ Route::post('/updateproduct', 'ProductController@updateproduct');
 Route::get('/delete_product/{id}', 'ProductController@delete_product');
 Route::get('/activate_product/{id}', 'ProductController@activate_product');
 Route::get('/unactivate_product/{id}', 'ProductController@unactivate_product');
-Route::get('/addToCart/{id}', 'ProductController@addToCart');
+
 
 Route::get('/categories', 'CategoryController@categories');
 Route::get('/addcategory', 'CategoryController@addcategory');
@@ -45,7 +50,7 @@ Route::post('/savecategory', 'CategoryController@savecategory');
 Route::get('/edit_category/{id}', 'CategoryController@edit');
 Route::post('/updatecategory', 'CategoryController@updatecategory');
 Route::get('/delete/{id}', 'CategoryController@delete');
-Route::get('/view_by_cat/{name}', 'CategoryController@view_by_cat');
+
 
 
 Route::get('/sliders', 'SliderController@sliders');
@@ -56,3 +61,9 @@ Route::post('/update_slider', 'SliderController@updateslider');
 Route::get('/delete_slider/{id}', 'SliderController@deleteslider');
 Route::get('/activate_slider/{id}', 'SliderController@activate_slider');
 Route::get('/unactivate_slider/{id}', 'SliderController@unactivate_slider');
+
+Route::get('/view_pdf/{id}', 'PdfController@view_pdf');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

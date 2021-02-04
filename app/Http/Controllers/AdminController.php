@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function dashboard()
     {
         return view('admin.dashboard');
@@ -15,11 +19,11 @@ class AdminController extends Controller
 
     public function orders()
     {
-        $orders=Order::get();
-        $orders->transform(function ($order,$key){
+        $orders = Order::get();
+        $orders->transform(function ($order, $key) {
             $order->cart = unserialize($order->cart);
             return $order;
         });
-        return view('admin.orders',compact('orders'));
+        return view('admin.orders', compact('orders'));
     }
 }

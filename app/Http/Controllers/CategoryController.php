@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\DB;
 class CategoryController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function addcategory()
     {
         return view('admin.addcategory');
@@ -59,11 +63,5 @@ class CategoryController extends Controller
         $category = Category::find($id);
         $category->delete();
         return redirect('/categories')->with('status', 'The ' . $category->category_name . 'Category has been deleted successfully');
-    }
-    public function view_by_cat($name)
-    {
-        $categories = Category::get();
-        $products = Product::where('product_category', $name)->get();
-        return view('client.shop', compact('categories', 'products'));
     }
 }

@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function addproduct()
     {
         $categories = Category::all()->pluck('category_name', 'category_name');
@@ -131,13 +135,5 @@ class ProductController extends Controller
         $product->status = 0;
         $product->update();
         return redirect('/products')->with('status', 'The ' . $product->product_name . ' status  has been updated successfully');
-    }
-    public function addToCart($id){
-        $product=Product::find($id);
-        $oldCart=Session::has('cart') ? Session::get('cart') : null ;
-        $cart=new Cart($oldCart);
-        $cart->add($product,$id);
-        Session::put('cart',$cart);
-        return redirect('/shop');
     }
 }
